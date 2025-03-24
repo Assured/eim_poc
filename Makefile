@@ -55,6 +55,7 @@ fpga.config: fpga.json
 		--top $(TOPMODULE) \
 		--package $(PACKAGE) \
 		--ignore-loops \
+		--lpf-allow-unconstrained \
 		--textcfg $@
 
 

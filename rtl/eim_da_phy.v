@@ -45,31 +45,6 @@ module eim_da_phy
     input wire                  buf_t   // tristate control (driver is disabled during tristate)
     );
 
-   //
-   // IOBUFs
-   //
-//   genvar                       i;
-//   generate
-//      for (i = 0; i < BUS_WIDTH; i = i+1)
-//        begin: eim_da
-//           //
-//           IOBUF #
-//               (
-//                .IOSTANDARD("LVCMOS33"),
-//                .DRIVE(12),
-//                .SLEW("FAST")
-//                )
-//           IOBUF_inst
-//               (
-//                .IO(buf_io[i]),
-//                .O(buf_ro[i]),
-//                .I(buf_di[i]),
-//                .T(buf_t)
-//                );
-//           //
-//        end
-//   endgenerate
-
 endmodule
 
 //======================================================================

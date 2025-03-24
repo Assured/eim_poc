@@ -40,7 +40,7 @@
 module eim_arbiter
   (
    // eim bus
-   input wire          eim_bclk, 
+   input wire          eim_bclk,
    input wire          eim_cs0_n,
    inout wire [15: 0]  eim_da,
    input wire [18:16]  eim_a,
@@ -53,7 +53,7 @@ module eim_arbiter
    input wire          sys_clk,
 
    // user bus
-   output wire [16: 0] sys_addr, 
+   output wire [16: 0] sys_addr,
    output wire         sys_wren,
    output wire [31: 0] sys_data_out,
    output wire         sys_rden,
@@ -70,13 +70,13 @@ module eim_arbiter
    wire [15: 0]        da_ro;   // value read from pins
    reg [15: 0]         da_di;   // value drives onto pins
 
-   eim_da_phy da_phy
-     (
-      .buf_io(eim_da),          // <-- connect directly top-level port
-      .buf_di(da_di),
-      .buf_ro(da_ro),
-      .buf_t(eim_oe_n)          // <-- driven by EIM directly
-      );
+//   eim_da_phy da_phy
+//     (
+//      .buf_io(eim_da),          // <-- connect directly top-level port
+//      .buf_di(da_di),
+//      .buf_ro(da_ro),
+//      .buf_t(eim_oe_n)          // <-- driven by EIM directly
+//      );
 
 
    //
@@ -258,7 +258,7 @@ module eim_arbiter
 
    assign eim_wait_n = ~eim_wait_reg;
 
-  
+
    /* These flags are used to generate 1-cycle pulses to trigger CDC
     * transaction.  Note that FSM goes from WRITE_LSB to WRITE_MSB and from
     * READ_START to READ_WAIT unconditionally, so these flags will always be
