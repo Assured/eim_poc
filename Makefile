@@ -14,14 +14,19 @@
 #-------------------------------------------------------------------
 # Top module name ans source files.
 #-------------------------------------------------------------------
-TOPMODULE  = eim_poc
-PACKAGE = CSFBGA285
+TOPMODULE = eim_poc
+PACKAGE   = CSFBGA285
 
 # FPGA source files.
 VERILOG_SRC_DIR = rtl
 VERILOG_SRC = \
 	$(VERILOG_SRC_DIR)/eim_poc.v \
-	$(CORES_SRC_DIR)/eim_ctrl.v \
+	$(VERILOG_SRC_DIR)/eim_arbiter.v \
+	$(VERILOG_SRC_DIR)/eim_arbiter_cdc.v \
+	$(VERILOG_SRC_DIR)/eim_cdc_bus_pulse.v \
+	$(VERILOG_SRC_DIR)/eim_da_phy.v \
+	$(VERILOG_SRC_DIR)/eim_indicator.v \
+	$(VERILOG_SRC_DIR)/eim_regs.v \
 	$(VERILOG_SRC_DIR)/clk_reset_gen.v
 
 
