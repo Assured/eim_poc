@@ -45,6 +45,23 @@ module eim_da_phy
     input wire                  buf_t   // tristate control (driver is disabled during tristate)
     );
 
+   //
+   // ECP5 bidirectional IO-buffer.
+   //
+   genvar                       i;
+   generate
+      for (i = 0; i < BUS_WIDTH; i = i+1)
+        begin: eim_da
+          BB BB_inst
+               (
+                .B(buf_io[i]),
+                .O(buf_ro[i]),
+                .I(buf_di[i]),
+                .T(buf_t)
+                );
+        end
+   endgenerate
+
 endmodule
 
 //======================================================================
