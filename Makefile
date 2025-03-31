@@ -30,9 +30,14 @@ VERILOG_SRC_DIR = rtl
 #	$(VERILOG_SRC_DIR)/clk_reset_gen.v
 
 
-# For the wiring test
+## For the wiring test
+#VERILOG_SRC = \
+#	$(VERILOG_SRC_DIR)/eim_wiring_test.v \
+#	$(VERILOG_SRC_DIR)/clk_reset_gen.v
+
+# For the minimal poc
 VERILOG_SRC = \
-	$(VERILOG_SRC_DIR)/eim_wiring_test.v \
+	$(VERILOG_SRC_DIR)/eim_mini_poc.v \
 	$(VERILOG_SRC_DIR)/clk_reset_gen.v
 
 
