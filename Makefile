@@ -19,14 +19,25 @@ PACKAGE   = CSFBGA285
 
 # FPGA source files.
 VERILOG_SRC_DIR = rtl
+#VERILOG_SRC = \
+#	$(VERILOG_SRC_DIR)/eim_poc.v \
+#	$(VERILOG_SRC_DIR)/eim_arbiter.v \
+#	$(VERILOG_SRC_DIR)/eim_arbiter_cdc.v \
+#	$(VERILOG_SRC_DIR)/eim_cdc_bus_pulse.v \
+#	$(VERILOG_SRC_DIR)/eim_da_phy.v \
+#	$(VERILOG_SRC_DIR)/eim_indicator.v \
+#	$(VERILOG_SRC_DIR)/eim_regs.v \
+#	$(VERILOG_SRC_DIR)/clk_reset_gen.v
+
+
+## For the wiring test
+#VERILOG_SRC = \
+#	$(VERILOG_SRC_DIR)/eim_wiring_test.v \
+#	$(VERILOG_SRC_DIR)/clk_reset_gen.v
+
+# For the minimal poc
 VERILOG_SRC = \
-	$(VERILOG_SRC_DIR)/eim_poc.v \
-	$(VERILOG_SRC_DIR)/eim_arbiter.v \
-	$(VERILOG_SRC_DIR)/eim_arbiter_cdc.v \
-	$(VERILOG_SRC_DIR)/eim_cdc_bus_pulse.v \
-	$(VERILOG_SRC_DIR)/eim_da_phy.v \
-	$(VERILOG_SRC_DIR)/eim_indicator.v \
-	$(VERILOG_SRC_DIR)/eim_regs.v \
+	$(VERILOG_SRC_DIR)/eim_mini_poc.v \
 	$(VERILOG_SRC_DIR)/clk_reset_gen.v
 
 
@@ -51,7 +62,7 @@ fpga.bit: fpga.config
 
 fpga.config: fpga.json
 	nextpnr-ecp5 --85k --json $^ \
-		--lpf config/orangecrab_r0.2.1.pcf \
+		--lpf config/eim_test.pcf \
 		--top $(TOPMODULE) \
 		--package $(PACKAGE) \
 		--ignore-loops \
