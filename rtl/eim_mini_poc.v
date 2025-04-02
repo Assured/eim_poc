@@ -21,7 +21,7 @@ module eim_poc
 
    output wire           rgb_led0_r,
    output wire           rgb_led0_g,
-   output wire           rgb_led0_b,
+   output wire           rgb_led0_b
    );
 
   
@@ -44,8 +44,8 @@ module eim_poc
    //
    // When OE is pulled low, output some data
    //----------------------------------------------------------------
-    wire [7:0] da_bus = {eim_da_7, eim_da_6, eim_da_5, eim_da_4, eim_da_3, eim_da_2, eim_da_1, eim_da_0};
-
+  wire [7:0] da_bus;
+  
     reg [7:0] memory[7:0];
 
     reg [7:0] address = 8'd0;
@@ -54,7 +54,14 @@ module eim_poc
     reg lba_last = 1'd1;
     reg wr_last = 1'd1;
 
-    assign da_bus = eim_oe_n ? 8'bZZZZZZZZ : dout;
+  BBPD BBPD_0 (.I(dout[0]), .T(eim_oe_n), .O(da_bus[0]), .B(eim_da_0));
+  BBPD BBPD_1 (.I(dout[1]), .T(eim_oe_n), .O(da_bus[1]), .B(eim_da_1));
+  BBPD BBPD_2 (.I(dout[2]), .T(eim_oe_n), .O(da_bus[2]), .B(eim_da_2));
+  BBPD BBPD_3 (.I(dout[3]), .T(eim_oe_n), .O(da_bus[3]), .B(eim_da_3));
+  BBPD BBPD_4 (.I(dout[4]), .T(eim_oe_n), .O(da_bus[4]), .B(eim_da_4));
+  BBPD BBPD_5 (.I(dout[5]), .T(eim_oe_n), .O(da_bus[5]), .B(eim_da_5));
+  BBPD BBPD_6 (.I(dout[6]), .T(eim_oe_n), .O(da_bus[6]), .B(eim_da_6));
+  BBPD BBPD_7 (.I(dout[7]), .T(eim_oe_n), .O(da_bus[7]), .B(eim_da_7));
 
     always @(posedge clk48) begin
         // capture address when LBA goes low
