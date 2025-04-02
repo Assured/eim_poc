@@ -31,7 +31,7 @@ module eim_poc
   wire sys_clk;
   wire rst_n;
   
-  clk_reset_gen clk_reset_geb_ins (
+  clk_reset_gen clk_reset_gen_ins (
                                    .clk_ref(clk48),
                                    .clk(sys_clk),
                                    .rst_n(rst_n)
