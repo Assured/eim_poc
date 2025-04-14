@@ -67,12 +67,14 @@ fpga.config: fpga.json
 		--package $(PACKAGE) \
 		--ignore-loops \
 		--lpf-allow-unconstrained \
+		--Werror \
 		--textcfg $@
 
 
 fpga.json: $(VERILOG_SRC)
 	yosys \
 	-l synth.txt \
+	-e '.' \
 	-p 'read_verilog $^; synth_ecp5 -json $@'
 
 
