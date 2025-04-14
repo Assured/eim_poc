@@ -148,7 +148,7 @@ module eim_poc
       // TODO: During a write transaction, RW may go low before LBA goes high. In that case,
       //       we wouldn't need to read the data here. For our trivial example it doesn't matter.
       if(eim_lba_n_reg[1] == 1) begin
-        dout_reg <= memory[address];
+        dout_reg <= memory[address_reg];
       end
     end
 
@@ -156,7 +156,7 @@ module eim_poc
     wr_last_reg <= eim_wr_n_reg[1];
     if(wr_last_reg != eim_wr_n_reg[1]) begin
       if(eim_wr_n_reg[1] == 1) begin
-        memory[address] <= cdc_da_bus;
+        memory[address_reg] <= cdc_da_bus;
       end
     end
   end
