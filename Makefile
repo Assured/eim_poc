@@ -40,6 +40,11 @@ VERILOG_SRC = \
 	$(VERILOG_SRC_DIR)/eim_mini_poc.v \
 	$(VERILOG_SRC_DIR)/clk_reset_gen.v
 
+ECP5_CELLS_DIR = $(shell yosys-config --datdir/ecp5)
+ECP5_SIM_CELLS = \
+$(ECP5_CELLS_DIR)/cells_bb.v \
+$(ECP5_CELLS_DIR)/cells_sim.v
+
 
 #-------------------------------------------------------------------
 # Build everything.
@@ -55,14 +60,21 @@ LINT_TOOL = verilator
 LINT_FLAGS = \
 	+1364-2005ext+ \
 	--lint-only \
+	-I$(ECP5_CELLS_DIR) \
 	-Wall \
 	-Wno-DECLFILENAME \
+	-Wno-UNUSED \
+	-Wno-UNDRIVEN \
+	-Wno-PINMISSING \
 	-Wno-WIDTHEXPAND \
 	-Wno-UNOPTFLAT \
+	-DNO_ECP5_DEFAULT_ASSIGNMENTS \
 	-Wno-GENUNNAMED
 
-lint_src: $(VERILOG_SRC)
-	$(LINT_TOOL) $(LINT_FLAGS) $^ >lint_issues.txt 2>&1 \
+lint_src: $(VERILOG_SRC) $(ECP5_SIM_CELLS)
+	$(LINT_TOOL) $(LINT_FLAGS) \
+	--top-module $(TOPMODULE) \
+	$^ >lint_issues.txt 2>&1 \
 	&& { rm -f lint_issues.txt; exit 0; } \
 	|| {   cat lint_issues.txt; exit 1; }
 .PHONY: lint_src
