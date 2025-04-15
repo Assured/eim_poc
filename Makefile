@@ -48,6 +48,27 @@ all: eim_poc.dfu
 
 
 #-------------------------------------------------------------------
+# Verilog source linting.
+#-------------------------------------------------------------------
+LINT_TOOL = /Users/js/bin/oss-cad-suite/bin/verilator
+
+LINT_FLAGS = \
+	+1364-2005ext+ \
+	--lint-only \
+	-Wall \
+	-Wno-DECLFILENAME \
+	-Wno-WIDTHEXPAND \
+	-Wno-UNOPTFLAT \
+	-Wno-GENUNNAMED
+
+lint_src: $(VERILOG_SRC)
+	$(LINT_TOOL) $(LINT_FLAGS) $^ >lint_issues.txt 2>&1 \
+	&& { rm -f lint_issues.txt; exit 0; } \
+	|| {   cat lint_issues.txt; exit 1; }
+.PHONY: lint_src
+
+
+#-------------------------------------------------------------------
 # Main FPGA build flow.
 # Synthesis. Place & Route. Bitstream generation.
 #-------------------------------------------------------------------
