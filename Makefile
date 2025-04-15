@@ -50,7 +50,7 @@ all: eim_poc.dfu
 #-------------------------------------------------------------------
 # Verilog source linting.
 #-------------------------------------------------------------------
-LINT_TOOL = /Users/js/bin/oss-cad-suite/bin/verilator
+LINT_TOOL = verilator
 
 LINT_FLAGS = \
 	+1364-2005ext+ \
