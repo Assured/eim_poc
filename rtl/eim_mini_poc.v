@@ -23,7 +23,13 @@ module eim_poc
 
    output wire rgb_led0_r,
    output wire rgb_led0_g,
-   output wire rgb_led0_b
+   output wire rgb_led0_b,
+
+   output reg pb13b,        // Extra GPIO
+   output reg pb4b,
+   output reg pb4a,
+   output reg pb6a,
+   output wire pb6b
    );
 
 
@@ -74,8 +80,11 @@ module eim_poc
   assign cdc_da_bus = {eim_da_7_reg[1], eim_da_6_reg[1], eim_da_5_reg[1], eim_da_4_reg[1],
                        eim_da_3_reg[1], eim_da_2_reg[1], eim_da_1_reg[1], eim_da_0_reg[1]};
 
+  // Unused
+  assign eim_wait_n = 1'b1;
+
   // Test memory with associated address and data hold registers.
-  reg [7:0] memory[7:0];
+  reg [7:0] memory [256];
   reg [7:0] address_reg;
   reg [7:0] dout_reg;
 
@@ -85,22 +94,28 @@ module eim_poc
 
   // Two stage sample registers for all inputs asynch realitive clk48.
   // The purpose of this is to solve Clock Domain Crossing (CDC).
-  reg eim_da_0_reg [0 : 1];
-  reg eim_da_1_reg [0 : 1];
-  reg eim_da_2_reg [0 : 1];
-  reg eim_da_3_reg [0 : 1];
-  reg eim_da_4_reg [0 : 1];
-  reg eim_da_5_reg [0 : 1];
-  reg eim_da_6_reg [0 : 1];
-  reg eim_da_7_reg [0 : 1];
+  reg [1:0] eim_da_0_reg;
+  reg [1:0] eim_da_1_reg;
+  reg [1:0] eim_da_2_reg;
+  reg [1:0] eim_da_3_reg;
+  reg [1:0] eim_da_4_reg;
+  reg [1:0] eim_da_5_reg;
+  reg [1:0] eim_da_6_reg;
+  reg [1:0] eim_da_7_reg;
 
-  reg eim_lba_n_reg [0 : 1];
-  reg eim_wr_n_reg[0 : 1];
+  reg [1:0] eim_lba_n_reg;
+  reg [1:0] eim_wr_n_reg;
 
-  reg eim_oe_n_reg[0 : 1];
+  reg [1:0] eim_oe_n_reg;
 
+  assign pb6b = clk48; // For debug, output the clock onto a spare GPIO
 
   always @(posedge clk48) begin
+    pb13b <=0;  // For debug, use GPIO to output pulses when various events are triggered
+    pb4b <= 0;
+    pb4a <= 0;
+    pb6a <= 0;
+
     // Sample data inputs.
     eim_da_0_reg[0] <= da_bus[0];
     eim_da_0_reg[1] <= eim_da_0_reg[0];
@@ -141,22 +156,28 @@ module eim_poc
     lba_last_reg <= eim_lba_n_reg[1];
     if(lba_last_reg != eim_lba_n_reg[1]) begin
       if(eim_lba_n_reg[1] == 0) begin
+        pb13b <= 1;
         address_reg <= cdc_da_bus;
-      end
 
-      // Load data into output buffer when LBA goes high (in case this is a read transaction)
-      // TODO: During a write transaction, RW may go low before LBA goes high. In that case,
-      //       we wouldn't need to read the data here. For our trivial example it doesn't matter.
-      if(eim_lba_n_reg[1] == 1) begin
-        dout_reg <= memory[address];
+        // If this is a write cycle, then we don't need to read from the memory.
+        // It doesn't matter in this example, but would matter if this has to
+        // go over a bus. In that case, we also need to manipulate WAIT to
+        // hang the EIM bus until the data is ready, so the whole thing becomes
+        // more complicated.
+        if(eim_wr_n_reg[1] == 1) begin
+            dout_reg <= memory[cdc_da_bus];
+        end
       end
     end
 
     // read in data when WR goes high
+    // The iMX6 EIM peripheral cannot add a delay before asserting this signal,
+    // so if for instance we need to add a delay to allow the data lines to
+    // settle, we need to do this on the FPGA side.
     wr_last_reg <= eim_wr_n_reg[1];
     if(wr_last_reg != eim_wr_n_reg[1]) begin
       if(eim_wr_n_reg[1] == 1) begin
-        memory[address] <= cdc_da_bus;
+        memory[address_reg] <= cdc_da_bus;
       end
     end
   end
