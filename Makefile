@@ -60,6 +60,7 @@ LINT_TOOL = verilator
 LINT_FLAGS = \
 	+1364-2005ext+ \
 	--lint-only \
+	--bbox-unsup \
 	-I$(ECP5_CELLS_DIR) \
 	-Wall \
 	-Wno-DECLFILENAME \
@@ -67,7 +68,6 @@ LINT_FLAGS = \
 	-Wno-UNDRIVEN \
 	-Wno-PINMISSING \
 	-Wno-WIDTHEXPAND \
-	-Wno-UNOPTFLAT \
 	-DNO_ECP5_DEFAULT_ASSIGNMENTS \
 	-Wno-GENUNNAMED
 
