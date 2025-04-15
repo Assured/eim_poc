@@ -24,13 +24,13 @@ module eim_poc
    output wire           rgb_led0_b
    );
 
-  
+
   //--------------------------------------------------------------------
   // Generate clock and reset using PLL resources and trees.
   //--------------------------------------------------------------------
   wire sys_clk;
   wire rst_n;
-  
+
   clk_reset_gen clk_reset_gen_ins (
                                    .clk_ref(clk48),
                                    .clk(sys_clk),
@@ -45,8 +45,8 @@ module eim_poc
    // When OE is pulled low, output some data
    //----------------------------------------------------------------
   wire [7:0] da_bus;
-  
-    reg [7:0] memory[7:0];
+
+    reg [7:0] memory[0:255];
 
     reg [7:0] address = 8'd0;
     reg [7:0] dout = 8'd0;

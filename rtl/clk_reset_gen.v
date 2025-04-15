@@ -82,7 +82,6 @@ module clk_reset_gen #(
               .CLKI(clk_ref),
               .CLKOP(clkop),
               .CLKFB(clkop),
-              .CLKINTFB(),
               .PHASESEL0(1'b0),
               .PHASESEL1(1'b0),
               .PHASEDIR(1'b1),
